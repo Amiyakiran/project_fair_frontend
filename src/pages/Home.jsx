@@ -8,13 +8,13 @@ import { Link } from 'react-router-dom'
 function Home() {
   return (
    <>
-        <div style={{width:'100%', height:'100vh',backgroundColor:'yellowgreen'}} >
+        <div style={{width:'100%', height:'100vh'}} className='bg-success' >
             <div className='container-fluid rounded'>
                 <Row className='align-items-center p-5'>
                     <Col sm={12} md={6}>
                     <h1 style={{fontSize:'50px'}} className='fw-bolder text-light mb-5'> <i class="fa-brands fa-stack-overflow"></i>Project Fair</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit incidunt amet doloribus minus soluta itaque </p>
-                    <button className='btn btn-success rounded'>Get started</button>
+                    <Link to={'/login'} className='btn btn-warning rounded'>Get started</Link>
                     </Col>
                     <Col sm={12} md={6}>
                     <img src={titleImage} alt="" style={{marginTop:'100px'}} className='w-75' />

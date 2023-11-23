@@ -1,8 +1,17 @@
 import React from 'react'
+import Header from '../components/Header'
+import { Row } from 'react-bootstrap'
 
 function Dashboard() {
+  
   return (
-    <div>Dashboard</div>
+    <>
+      <Header dashboard />
+
+      <Row style={{marginTop:'100px'}} className='container-fluid'>
+       
+      </Row>
+    </>
   )
 }
 
