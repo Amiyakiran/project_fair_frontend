@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import titleImage from '../Assests/designer.svg'
 import ProjectCard from '../components/ProjectCard'
@@ -6,6 +6,12 @@ import { Link } from 'react-router-dom'
 
 
 function Home() {
+  const [islogin , setIsLogin]=useState(false)
+  useEffect(()=>{
+    if(sessionStorage.getItem("token")){
+        setIsLogin(true)
+    }
+  },[])
   return (
    <>
         <div style={{width:'100%', height:'100vh'}} className='bg-success' >
@@ -14,7 +20,10 @@ function Home() {
                     <Col sm={12} md={6}>
                     <h1 style={{fontSize:'50px'}} className='fw-bolder text-light mb-5'> <i class="fa-brands fa-stack-overflow"></i>Project Fair</h1>
                     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit incidunt amet doloribus minus soluta itaque </p>
-                    <Link to={'/login'} className='btn btn-warning rounded'>Get started</Link>
+                    {islogin?
+                      <Link to={'/dashboard'} className='btn btn-warning rounded'>Manage your project</Link>:
+                    <Link to={'/login'} className='btn btn-warning rounded'>Get started</Link>}
+
                     </Col>
                     <Col sm={12} md={6}>
                     <img src={titleImage} alt="" style={{marginTop:'100px'}} className='w-75' />

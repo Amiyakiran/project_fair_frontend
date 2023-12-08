@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
-import { registerAPI } from '../Services/allAPI'
+import { loginAPI, registerAPI } from '../Services/allAPI'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -34,6 +34,34 @@ function Auth({ register }) {
           username:"",email:"",password:""
         })
         navigate('/login')
+      }else{
+        toast.error(result.response.data)
+        console.log(result);
+      }
+    } 
+  }
+
+  //login function
+  const handleLogin = async (e)=>{
+    e.preventDefault()
+    const {email,password}= userData
+    /* console.log(userData); */
+
+    if(!email || !password){
+      toast.info('Pease fill the form completely')
+    }else{
+      const result =  await loginAPI(userData)
+      console.log(result);
+      if(result.status===200){
+       /*  toast.success(`login successfully`) */
+       //sessionstorage is similar to local stoarge but in session storage the data get removed when the tag is closed but in local stoarge data remain untill we manually remove it.
+       sessionStorage.setItem("existingUser",JSON.stringify(result.data.existingUser))
+       sessionStorage.setItem("token",result.data.token)
+
+        setUserData({
+         email:"",password:""
+        })
+        navigate('/')
       }else{
         toast.error(result.response.data)
         console.log(result);
@@ -80,7 +108,7 @@ function Auth({ register }) {
                       <p>Already have account? Click here to <Link style={{color:'blue'}} to={'/login'}> Login</Link></p>
                     </div> :
                     <div>
-                    <button className='btn btn-warning mt-3'>Login</button>
+                    <button onClick={handleLogin} className='btn btn-warning mt-3'>Login</button>
                     <p>New User? Click here to <Link to={'/register'} style={{color:'blue'}} > Register</Link></p>
                   </div> 
                    }
