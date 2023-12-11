@@ -1,15 +1,21 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Header from '../components/Header'
 import { Col, Row } from 'react-bootstrap'
 import Myprojects from '../components/Myprojects'
 import Profile from '../components/Profile'
+import { json } from 'react-router-dom'
 
 function Dashboard() {
-  
+   const[username,setUsername]=useState("")
+  useEffect(()=>{
+    if(sessionStorage.getItem("existingUser")){
+        setUsername(JSON.parse(sessionStorage.getItem("existingUser")).username)
+    }
+  },[])
   return (
     <>
       <Header dashboard />
-      <h2 className='ms-3' style={{marginTop:'100px'}}>Welcome <span className='text-warning'>User</span></h2>
+      <h2 className='ms-3' style={{marginTop:'100px'}}>Welcome <span className='text-warning'>{username}</span></h2>
 
       <Row  className='container-fluid mt-5'>
        <Col sm={12} md={8}>
