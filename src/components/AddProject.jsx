@@ -14,7 +14,7 @@ function AddProject() {
     })
     //since we are getting a object rather than the url we need to convert that into url and store that data
     const[preview,setPreview]= useState("")
-
+    const [token, setToken] = useState("")
 
     const [show, setShow] = useState(false);
 
@@ -23,6 +23,7 @@ function AddProject() {
         setProjectDetails({
             title:"",language:"",overview:"",github:"",website:"",projectImage:""
         })
+
         setPreview("")
     }
     const handleShow = () => setShow(true);
@@ -36,7 +37,16 @@ function AddProject() {
            setPreview(URL.createObjectURL(projectDetails.projectImage))
         }
     },[projectDetails.projectImage])
-
+    //we can actually define more than one useeffect in the same component
+    useEffect(()=>{
+        //since we need the userid while storing the project in projects collection. we get that from the token .hence token is taken from the session storage.
+        if(sessionStorage.getItem("token")){
+            setToken(sessionStorage.getItem("token"))
+        }
+        else{
+            setToken("")
+        }
+    },[])
 
     const handleAdd =  async(e)=>{
         e.preventDefault()
@@ -51,16 +61,28 @@ function AddProject() {
             reqBody.append("title",title)
             reqBody.append("language",language)
             reqBody.append("overview",overview)
+            reqBody.append("projectImage",projectImage)
             reqBody.append("github",github)
             reqBody.append("website",website)
-            reqBody.append("projectImage",projectImage)
+           
 
+            if(token){
+                //upload content
             const reqHeader ={
-                "Content-Type":"multipart/form-data"
+                "Content-Type":"multipart/form-data",
+                "Authorization":`Bearer ${token}` // this is the syntax of sharing token.we cannot just share the data. it can only be shared along with bearer (single space between bearer and token)
             }
-
+           
             const result = await addProjectAPI(reqBody,reqHeader)
             console.log(result);
+            if (result.status===200) {
+                console.log(result.data);
+            }
+            else{
+                console.log(result.response.data);
+
+            }
+         }
         }
     }
 
@@ -75,7 +97,7 @@ function AddProject() {
                 onHide={handleClose}
                 backdrop="static"
                 keyboard={false}
-                size='lg'
+                size='lg' 
                 centered
             >
                 <Modal.Header closeButton>
