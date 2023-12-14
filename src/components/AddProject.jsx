@@ -77,6 +77,12 @@ function AddProject() {
             console.log(result);
             if (result.status===200) {
                 console.log(result.data);
+                //closing the modal and clearing the field
+                handleClose()
+                //alert
+                alert("project added")
+                //share the data from addproject component to myproject component
+
             }
             else{
                 console.log(result.response.data);
