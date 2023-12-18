@@ -3,15 +3,38 @@ import { Row, Col } from 'react-bootstrap'
 import titleImage from '../Assests/designer.svg'
 import ProjectCard from '../components/ProjectCard'
 import { Link } from 'react-router-dom'
+import { homeProjectAPI } from '../Services/allAPI'
 
 
 function Home() {
   const [islogin , setIsLogin]=useState(false)
+
+  const [homeProjects,setHomeProject]=useState([])
+ 
+  const getHomeFunction = async ()=>{
+    const result = await homeProjectAPI()
+    if(result.status ===200){
+      setHomeProject(result.data)
+    }
+    else{
+      console.log(result);
+      console.log(result.response.data);
+    }
+  }
+console.log(homeProjects);
+
   useEffect(()=>{
     if(sessionStorage.getItem("token")){
         setIsLogin(true)
     }
+    else{
+      setIsLogin(false)
+    }
+
+    //api call for homeProject
+    getHomeFunction()
   },[])
+ 
   return (
    <>
         <div style={{width:'100%', height:'100vh'}} className='bg-success' >
@@ -37,15 +60,13 @@ function Home() {
             <h1 className='text-center'>Explore Our Project</h1>
            <marquee scrollAmount={25} className=" mt-5">
                 <div className='d-flex'>
-                    <div className='ms-5' style={{width:'500px'}}>
-                      <ProjectCard/>
-                    </div>
-                    <div className='ms-5'  style={{width:'500px'}}>
-                      <ProjectCard/>
-                    </div>
-                    <div className='ms-5'  style={{width:'500px'}}>
-                      <ProjectCard/>
-                    </div>
+                   {homeProjects?.length>0?
+                   homeProjects.map((item)=>(<div className='ms-5' style={{width:'500px'}}>
+                   <ProjectCard project={item} />
+                 </div>))
+                    :null
+                    }
+                    
                 </div>
            </marquee>
            <div className='text-center mt-5'>
