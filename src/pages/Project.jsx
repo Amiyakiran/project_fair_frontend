@@ -5,7 +5,9 @@ import ProjectCard from '../components/ProjectCard'
 import { allProjectAPI } from '../Services/allAPI'
 
 function Project() {
+  const[searchKey,setSearchKey]=useState("")
  const[allprojects , setAllProjects] = useState([])
+
   const getAllProject = async()=>{
     if(sessionStorage.getItem("token")){
       const token = sessionStorage.getItem("token")
@@ -13,7 +15,7 @@ function Project() {
         "Content-Type":"application/json",
         "Authorization":`Bearer ${token}`
       }
-      const result = await allProjectAPI(reqHeader)
+      const result = await allProjectAPI(searchKey,reqHeader)
       console.log(result);
       if(result.status ===200){
         setAllProjects(result.data)
@@ -23,9 +25,11 @@ function Project() {
       }
     }
   }
+  console.log(searchKey);
+
   useEffect(()=>{
     getAllProject()
-  },[])
+  },[searchKey])
   return (
     <>
     <Header/>
@@ -35,7 +39,7 @@ function Project() {
 
         <div className="d-flex justify-content-center align-items-center">
             <div className="d-flex w-25 mt-5">
-            <input className='form-control' type="text" placeholder='Search the project using technologies' />
+            <input className='form-control' type="text" placeholder='Search the project using technologies'value={searchKey} onChange={e=>setSearchKey(e.target.value)} />
             <i style={{marginLeft:'-40px', color:'grey'}} class="fa-solid fa-magnifying-glass  fa-rotate-90"></i>
             </div>
             
@@ -46,7 +50,10 @@ function Project() {
            allprojects.map((item)=>( <Col sm={12} md={6} lg={4}>
             <ProjectCard project={item}/>
          </Col>))
-          :null}
+          :<div className='d-flex justify-content-center align-items-center flex-column'>
+            <img width={'200px'} height={'200px'} src='https://cdn.pixabay.com/animation/2023/06/13/15/12/15-12-30-710_512.gif' alt='no image'/>
+            <p className='text-danger fw-3 fs-3'>Please Login to view Projects</p></div>
+          }
         </Row>
     </div>
     
