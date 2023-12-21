@@ -1,14 +1,18 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { addProjectAPI } from '../Services/allAPI';
+import { addProjectResponseContext } from '../Contexts/ContextShare';
 
 
 
 function AddProject() {
+    //to use the contect we need to use UseContext hook
+    const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
+
     const[projectDetails,setProjectDetails]=useState({
         title:"",language:"",overview:"",github:"",website:"",projectImage:""
     })
@@ -82,10 +86,12 @@ function AddProject() {
                 //alert
                 alert("project added")
                 //share the data from addproject component to myproject component
+                setAddProjectResponse(result.data)
 
             }
             else{
-                console.log(result.response.data);
+                console.log(result);
+               alert(result.response.data);
 
             }
          }

@@ -1,8 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState,useContext } from 'react'
 import AddProject from './AddProject'
 import { userProjectAPI } from '../Services/allAPI'
+import { addProjectResponseContext } from '../Contexts/ContextShare';
+import EditProject from './EditProject';
+
 
 function Myprojects() {
+  const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
+
   const [userProjects,setUserProjects]=useState([])
 
   const getUserProject = async()=>{
@@ -25,7 +30,7 @@ function Myprojects() {
   console.log(userProjects);
   useEffect(()=>{
     getUserProject()
-  },[])
+  },[addProjectResponse])
   return (
     <div className='card shadow p-3 ms-3 me-3'>
         
@@ -42,7 +47,7 @@ function Myprojects() {
             userProjects.map((item)=>( <div className="border d-flex align-items-center rounded p-2">
             <h5>{item.title}</h5>
             <div className="icon ms-auto">
-                <button className="btn"><i class="fa-solid fa-pen-to-square text-info"></i></button>
+                <EditProject project ={item}/>
                 <a href={item.github} target='_blank' className="btn"><i class="fa-brands fa-github text-success"></i></a>
 
                 <button className="btn"><i class="fa-solid fa-trash text-danger"></i></button>
