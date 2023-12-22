@@ -1,12 +1,13 @@
 import React, { useEffect, useState,useContext } from 'react'
 import AddProject from './AddProject'
-import { userProjectAPI } from '../Services/allAPI'
-import { addProjectResponseContext } from '../Contexts/ContextShare';
+import { deleteProjectAPI, userProjectAPI } from '../Services/allAPI'
+import { addProjectResponseContext, editProjectResponseContext } from '../Contexts/ContextShare';
 import EditProject from './EditProject';
 
 
 function Myprojects() {
   const {addProjectResponse,setAddProjectResponse}=useContext(addProjectResponseContext)
+  const {editProjectResponse,setEditProjectResponse}=useContext(editProjectResponseContext)
 
   const [userProjects,setUserProjects]=useState([])
 
@@ -30,7 +31,26 @@ function Myprojects() {
   console.log(userProjects);
   useEffect(()=>{
     getUserProject()
-  },[addProjectResponse])
+  },[addProjectResponse,editProjectResponse])
+
+
+  const handleDelete = async(id)=>{
+    const token = sessionStorage.getItem("token")
+    const reqHeader ={
+      "Content-Type":"application/json",
+      "Authorization":`Bearer ${token}`
+  } 
+     const result = await deleteProjectAPI(id,reqHeader)
+     if(result.status===200){
+      //call getUserProject
+      getUserProject()
+     }
+     else{
+      alert(result.response.data)
+     }
+  }
+
+
   return (
     <div className='card shadow p-3 ms-3 me-3'>
         
@@ -50,7 +70,7 @@ function Myprojects() {
                 <EditProject project ={item}/>
                 <a href={item.github} target='_blank' className="btn"><i class="fa-brands fa-github text-success"></i></a>
 
-                <button className="btn"><i class="fa-solid fa-trash text-danger"></i></button>
+                <button onClick={(e)=>handleDelete(item._id)} className="btn"><i class="fa-solid fa-trash text-danger"></i></button>
 
             </div>
         </div>))

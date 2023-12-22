@@ -1,12 +1,15 @@
-import React, { useEffect }  from 'react'
+import React, { useContext, useEffect }  from 'react'
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import { BASE_URL } from '../Services/baseurl';
 import { editProjectAPI } from '../Services/allAPI';
+import { editProjectResponseContext } from '../Contexts/ContextShare';
 
 
 function EditProject({project}) {
+    //context api
+    const {editProjectResponse,setEditProjectResponse}=useContext(editProjectResponseContext)
     //to hold project details
     const[projectDetails,setProjectDetails]=useState({
         id:project._id,title:project.title,language:project.language,overview:project.overview,github:project.github,website:project.website,projectImage:""})
@@ -30,8 +33,8 @@ function EditProject({project}) {
         setPreview("")
     }
     const handleShow = () => setShow(true);
-    const handleUpdate = async(e)=>{
-        e.preventDefault()
+    const handleUpdate = async()=>{
+      
       //image field will be always filled so check the other values
       const {id,title,language,overview,github,website,projectImage} = projectDetails
       if(!title || !language || !overview || !github || !website ){
@@ -53,11 +56,12 @@ function EditProject({project}) {
             "Authorization":`Bearer ${token}`
         }
         //api call
-        const result = editProjectAPI(id,reqBody,reqHeader)
+        const result = await editProjectAPI(id,reqBody,reqHeader)
         console.log(result);
         if(result.status===200){
             handleClose()
             //pass the response to myProject component
+            setEditProjectResponse(result.data)
         }
         else{
             console.log(result);
@@ -70,11 +74,12 @@ function EditProject({project}) {
             "Authorization":`Bearer ${token}`
         } 
         //api call 
-        const result = editProjectAPI(id,reqBody,reqHeader)
+        const result = await editProjectAPI(id,reqBody,reqHeader)
         console.log(result);
         if(result.status===200){
             handleClose()
             //pass the response to myProject component
+            setEditProjectResponse(result.data)
         }
         else{
             console.log(result);
