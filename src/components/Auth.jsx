@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Form } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginAPI, registerAPI } from '../Services/allAPI'
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { tokenAuthContext } from '../Contexts/TokenAuth';
 
 
 function Auth({ register }) {
+  const {isAuthorized, setIsAuthorized} = useContext(tokenAuthContext)
   const navigate = useNavigate()
   //state to store data
   const [userData, setUserData] = useState({
@@ -57,6 +59,9 @@ function Auth({ register }) {
        //sessionstorage is similar to local stoarge but in session storage the data get removed when the tag is closed but in local stoarge data remain untill we manually remove it.
        sessionStorage.setItem("existingUser",JSON.stringify(result.data.existingUser))
        sessionStorage.setItem("token",result.data.token)
+
+       //context api
+       setIsAuthorized(true)
 
         setUserData({
          email:"",password:""

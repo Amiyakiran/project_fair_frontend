@@ -64,7 +64,8 @@ function Myprojects() {
         <div className="mt-4">
             {/* collection of user project */}
             {userProjects?.length>0?
-            userProjects.map((item)=>( <div className="border d-flex align-items-center rounded p-2">
+            userProjects.map((item)=>(
+             <div className="border d-flex align-items-center rounded p-2 mb-3 bg-light">
             <h5>{item.title}</h5>
             <div className="icon ms-auto">
                 <EditProject project ={item}/>

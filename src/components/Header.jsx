@@ -1,9 +1,23 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { tokenAuthContext } from '../Contexts/TokenAuth';
 
 function Header({dashboard}) {
+  const navigate = useNavigate()
+  const {isAuthorized, setIsAuthorized}= useContext(tokenAuthContext)
+
+  const handleLogout = ()=>{
+    //remove existing user details from browser
+    sessionStorage.removeItem("existingUser")
+    sessionStorage.removeItem("token")
+    //contextapi
+    setIsAuthorized(false)
+   //navigate to home
+   navigate('/')
+
+  }
   return (
     <Navbar className='p-3 fixed-top bg-success'  >
     <Container>
@@ -14,7 +28,7 @@ function Header({dashboard}) {
      </Link>
       </Navbar.Brand>
       {dashboard &&
-        <div  className="btn btn-warning ms-auto text-light">Logout <i class="fa-solid fa-power-off ms-2"></i></div>}
+        <div onClick={handleLogout}  className="btn btn-warning ms-auto text-light">Logout <i class="fa-solid fa-power-off ms-2"></i></div>}
     </Container>
   </Navbar>
   )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Collapse from 'react-bootstrap/Collapse';
@@ -8,6 +8,18 @@ function Profile() {
 
     const [open, setOpen] = useState(false);
 
+    const [userProfile,setUserProfile] = useState({
+      username:"",email:"",password:"",profile:"",github:"",linkedin:""
+    })
+    const [existingImage,setExistingImage]=useState("")
+    const [preview,setPreview]=useState("")
+
+    useEffect(()=>{
+     if(sessionStorage.getItem("existingUser")){
+      const user = JSON.parse(sessionStorage.getItem("existingUser"))
+      setUserProfile({...userProfile,username:user.username,email:user.email,password:user.password,profile:"",github:user.github})
+     }
+    },[])
 
   return (
     <div className='card shadow p-5'>
